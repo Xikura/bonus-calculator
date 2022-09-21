@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style type="text/tailwindcss">
+    html, body {
+      /* height: 100%;  */
+      width: 100%;
+      padding: 0; margin: 0;
+      color: #fff;
+    }
+    body {
+      background-color: #6192b0;
+    }
+    .background {
+      width: 100%;
+      height: 800px;
+      background: transparent url(./img/background.jpg) no-repeat bottom center;
+      position: fixed;
+      bottom: 0;
+    }
+    label {
+      @apply block;
+    }
+    input {
+      @apply border px-3 py-2 rounded-lg block w-full bg-white/95;
+      color: #333;
+    }
+    input[type="number"], input[type="text"] {
+      @apply mt-2;
+    }
+    input[type="checkbox"] {
+      width: 25px;
+      height: 25px;
+    }
+    input[disabled] {
+      @apply pointer-events-none bg-teal-500/75 text-white border-none;
+    }
+    .container {
+      max-width: 600px !important;
+      min-width: 360px !important;
+      /* @apply sm:w-[410px] w-auto; */
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="app" class="mx-3 sm:mx-6">
+    <div class="background z-[-1]"></div>
+
+    <div class="container mx-auto my-10 sm:my-20 p-5 sm:p-12 bg-slate-800/75 rounded-xl transition-all">
+      <div class="flex flex-col">
+        <h1 class="mb-8 text-2xl text-center w-full underline underline-offset-2">Crayon bonusordning {{startYear}}
+        </h1>
+        <div class="my-3">
+          <label for="bonus0">Estimert utbetalt bonus i {{startYear}}</label>
+          <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">Oktober, november og desember for
+            de med månedlig bonus</p>
+          <input id="bonus0" type="number" min="0" v-model="bonus0" />
+          <p v-if="bonus0 > 500000" class="mt-2 text-xs leading-2 text-lightgray border-l-2 pl-3 italic">
+            {{ guiFormatBonus }} i
+            bonus..? Virkelig? Vipps gjerne noe til 943 01 272</p>
+        </div>
+        <div class="my-3">
+          <label for="prosent0">Prosentandel omgjort til aksjer</label>
+          <input id="prosent0" type="number" min="0" max="100" :value="percentage0" @input="updatePercentage0" />
+        </div>
+        <div class="my-3 flex justify-between items-center">
+          <label for="minimized" class="whitespace-nowrap">Forenklet visning?</label>
+          <input id="minimized" type="checkbox" v-model="minimized">
+        </div>
+        <div class="my-3" v-if="!minimized">
+          <label for="prosent0">Investeringsbeløp</label>
+          <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">1 krone opptjent bonus = 2 kroner i aksjer
+          </p>
+          <input id="prosent0" type="number" min="0" max="100" v-model="totalStocks" disabled />
+        </div>
+        <div class="my-3" v-if="!minimized">
+          <label for="prosent0">Risiko</label>
+          <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">Teoretisk høyeste beløp tapt om aksjene
+            faller til 0</p>
+          </p>
+          <input id="prosent0" type="number" min="0" max="100" v-model="stocks" disabled />
+        </div>
+      </div>
+      <hr class="my-5">
+      <div>
+        <h2 class="mb-2 text-xl w-full underline underline-offset-2">{{startYear + 1}}</h2>
+        <div class="my-2 flex justify-between items-center">
+          <label for="payout1a" class="whitespace-nowrap">Realiser årets aksjer</label>
+          <input id="payout1a" type="checkbox" v-model="payout1a">
+        </div>
+        <div class="my-3" v-if="!minimized">
+          <label for="stock1Realized">Realisert aksjeverdi {{startYear + 1 }}</label>
+          <input id="stock1Realized" type="number" v-model="stock1Realized" disabled />
+        </div>
+        <div class="my-3" v-if="!minimized">
+          <label for="stock1Unrealized">Urealisert aksjeverdi {{startYear + 1}} <span
+              class="text-orange-500">*</span></label>
+          <input id="stock1Unrealized" type="number" v-model="stock1Unrealized" disabled />
+        </div>
+        <div class="my-2 flex justify-between items-center">
+          <label for="end1" class="whitespace-nowrap">Avslutte jobb dette året?</label>
+          <input id="end1" type="checkbox" v-model="end1">
+        </div>
+      </div>
+      <div v-if="!end1">
+        <hr class="my-5">
+        <h2 class="mb-2 text-xl w-full underline underline-offset-2">{{startYear + 2}}</h2>
+        <div class="my-2 flex justify-between items-center">
+          <label for="payout2a" class="whitespace-nowrap">Realiser årets aksjer</label>
+          <input id="payout2a" type="checkbox" v-model="payout2a">
+        </div>
+        <div class="my-2 flex justify-between items-center">
+          <label for="payout1b" class="whitespace-nowrap">Realiser aksjer fra {{startYear + 1}}</label>
+          <input id="payout1b" type="checkbox" v-model="payout1b" :disabled="payout1a">
+        </div>
+        <div class="my-3">
+          <label for="stock2Change">Endring i aksjekurs siste året</label>
+          <input id="stock2Change" type="number" v-model="stock2Change" />
+        </div>
+        <div class="my-3" v-if="!minimized">
+          <label for="stock2Realized">Realisert aksjeverdi {{startYear + 2}} <span
+              class="text-orange-500">*</span></label>
+          <input id="stock2Realized" type="number" v-model="stock2Realized" disabled />
+        </div>
+        <div class="my-3" v-if="!minimized">
+          <label for="stock2Unrealized">Urealisert aksjeverdi {{startYear + 2}} <span
+              class="text-orange-500">*</span></label>
+          <input id="stock2Unrealized" type="number" v-model="stock2Unrealized" disabled />
+        </div>
+        <div class="my-2 flex justify-between items-center">
+          <label for="end2" class="whitespace-nowrap">Avslutte jobb dette året?</label>
+          <input id="end2" type="checkbox" v-model="end2">
+        </div>
+      </div>
+
+      <div v-if="!end2 && !end1">
+        <hr class="my-5">
+        <h2 class="mb-2 text-xl w-full underline underline-offset-2">{{startYear + 3}}</h2>
+        <div class="my-2 flex justify-between items-center">
+          <label for="payout3" class="whitespace-nowrap">Realiser årets aksjer</label>
+          <input id="payout3" type="checkbox" v-model="payout3a">
+        </div>
+        <div class="my-2 flex justify-between items-center">
+          <label for="payout2b" class="whitespace-nowrap">Realiser aksjer fra {{startYear + 2}}</label>
+          <input id="payout2b" type="checkbox" v-model="payout2b" :disabled="!stock2Unrealized">
+        </div>
+        <div class="my-2 flex justify-between items-center">
+          <label for="payout1c" class="whitespace-nowrap">Realiser aksjer fra {{startYear + 1}}</label>
+          <input id="payout1c" type="checkbox" v-model="payout1c" :disabled="!stock1Unrealized">
+        </div>
+        <div class="my-3">
+          <label for="stock3Start">Endring i aksjekurs siste året</label>
+          <input id="stock3Start" type="number" v-model="stock3Start" />
+        </div>
+        <div class="my-3" v-if="!minimized">
+          <label for="stock3Realized">Realisert aksjeverdi {{startYear + 3}} <span
+              class="text-orange-500">*</span></label>
+          <input id="stock3Realized" type="number" v-model="stock3Realized" disabled />
+        </div>
+        <div class="my-3" v-if="!minimized">
+          <label for="stock3Unrealized">Urealisert aksjeverdi {{startYear + 3}} <span
+              class="text-orange-500">*</span></label>
+          <input id="stock3Unrealized" type="number" v-model="stock3Unrealized" disabled />
+        </div>
+      </div>
+      <hr class="my-5">
+      <div>
+        <h2 class="mb-2 text-xl w-full underline underline-offset-2">Totalt</h2>
+        <div v-if="!minimized">
+          <div class="my-3">
+            <label for="totalBonus">Bonus utbetalt som normalt </label>
+            <input id="totalBonus" type="number" disabled v-model="totalBonus" />
+          </div>
+          <div class="my-3">
+            <label for="totalRealizedGain">Realisert aksjeverdi <span class="text-orange-500">*</span></label>
+            <input id="totalRealizedGain" type="number" disabled v-model="totalRealizedGain" />
+          </div>
+          <div class="my-3">
+            <label for="totalUnrealized">Urealiserte aksjeverdi <span class="text-orange-500">*</span></label>
+            <input id="totalUnrealized" type="number" disabled v-model="totalUnrealized" />
+          </div>
+          <!-- <div class="my-3">
+          <label for="prosent">Urealisert aksjeverdi</label>
+          <input id="prosent" type="number" />
+        </div>
+        <div class="my-3">
+          <label for="prosent">Totalt</label>
+          <input id="prosent" type="number" />
+        </div> -->
+          <hr class="my-5">
+        </div>
+        <div class="my-3">
+          <label for="totalAll">Totalt alle poster <span class="text-orange-500">*</span></label>
+          <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">Bonus + fortløpende realiserte aksjer +
+            urealiserte aksjer</p>
+          <!-- <input id="totalRealizedStockAndBonus" type="number" disabled v-model="totalRealizedStockAndBonus" /> -->
+          <input id="totalAll" type="number" disabled v-model="totalAll" />
+        </div>
+        <div class="my-3">
+          <label for="comparedToBonusOnly">Gevinst <span class="text-orange-500">*</span></label>
+          <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">I forhold til vanlig bonusordning, legg
+            merke til forbeholdene nedenfor</p>
+          <input id="comparedToBonusOnly" :class="{ '!bg-red-800': comparedToBonusOnly < 0}" type="number" disabled
+            v-model="comparedToBonusOnly" />
+          <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic" v-if="comparedToBonusOnly < 0">Nei dette
+            var visst ikke noe for deg... Kanskje du kan endre på noe?</p>
+        </div>
+
+
+      </div>
+      <hr class="mt-5 mb-12">
+      <div>
+        <p class="text-xs pl-3 border-l-2 italic"> Alle markerte (<span class="text-orange-500">*</span>) verdier er
+          estimater</p>
+        <p class="text-xs pl-3 border-l-2 italic mt-1">Med forbehold om at all realisering av aksjer skjer ved
+          mottakelse i Q1</p>
+        <p class="text-xs pl-3 border-l-2 italic mt-1">Det er ikke tatt høyde for skatt, feriepenger, pensjon, inflasjon
+          og andre smarte valg du heller kunne gjort med utbetalt bonus</p>
+        <p class="text-xs pl-3 border-l-2 italic mt-1">Do your own research - Det er dine penger det er snakk om</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          stock2Change: 5,
+          stock3Start: 5,
+          startYear: 2022,
+          minimized: false,
+          message: 'Hello Vue!',
+          bonus0: 10000,
+          percentage0: 50,
+          stockCount: 900,
+          payout1a: false,
+          payout1b: false,
+          payout1c: false,
+          payout2a: false,
+          payout2b: false,
+          payout3a: false,
+          end1: false,
+          end2: false,
+          // Total
+        }
+      },
+      methods: {
+        updatePercentage0(e) {
+          if (e.target.value > 100) {
+            e.target.value = 100
+          }
+          this.percentage0 = e.target.value;
+          this.$forceUpdate();
+        },
+        guiFormatNumber(number) {
+          return number.toLocaleString('no-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        },
+        // roundToNearestTen(value) {
+        //   return Math.round(value / 10) * 10;
+        // }
+      },
+      computed: {
+        stock3Change() {
+          console.log(((100 + this.stock2Change) / 100) * ((100 + this.stock3Start) / 100));
+          return ((100 + this.stock2Change) / 100) * ((100 + this.stock3Start) / 100);
+        },
+        stocks() {
+          return this.bonus0 * (this.percentage0 / 100);
+        },
+        totalStocks() {
+          return this.stocks * 2;
+        },
+        totalBonus() {
+          return this.bonus0 - this.stocks;
+        },
+        dividedTotalStocks() {
+          return this.totalStocks / 3;
+        },
+        guiFormatBonus() {
+          return this.guiFormatNumber(this.bonus0)
+        },
+        stock1Realized() {
+          return this.payout1a ? Math.round(this.dividedTotalStocks) : 0;
+        },
+        stock2Realized() {
+          if (this.end1) {
+            return 0;
+          }
+          var payout = 0;
+          if (this.payout1b) {
+            payout += this.stock1Unrealized;
+          }
+          if (this.payout2a) {
+            payout += this.dividedTotalStocks;
+          }
+          return Math.round(payout * ((100 + this.stock2Change) / 100));
+        },
+        stock3Realized() {
+          if (this.end2) {
+            return 0;
+          }
+          var payout = 0;
+          if (this.payout1c) {
+            payout += this.stock1Unrealized;
+          }
+          if (this.payout2b) {
+            payout += this.stock2Unrealized;
+          }
+          if (this.payout3a) {
+            payout += this.dividedTotalStocks;
+          }
+          return Math.round(payout * this.stock3Change);
+        },
+        stock1Unrealized() {
+          return this.payout1a ? 0 : Math.round(this.dividedTotalStocks);
+        },
+        stock2Unrealized() {
+          return (this.end1 || this.payout2a) ? 0 : Math.round(this.dividedTotalStocks * (100 + this.stock2Change) / 100);
+        },
+        stock3Unrealized() {
+          return (this.end1 || this.end2 || this.payout3a) ? 0 : Math.round(this.dividedTotalStocks * this.stock3Change);
+        },
+        totalUnrealized() {
+          return this.stock1Unrealized + this.stock2Unrealized + this.stock3Unrealized;
+        },
+        totalRealizedGain() {
+          return this.stock1Realized + this.stock2Realized + this.stock3Realized;
+        },
+        totalAll() {
+          return this.totalBonus + this.totalRealizedGain + this.totalUnrealized;
+        },
+        comparedToBonusOnly() {
+          return this.totalAll - this.bonus0;
+        },
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>
