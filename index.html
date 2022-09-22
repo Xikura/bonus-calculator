@@ -4,7 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.39/vue.global.prod.min.js"
+    integrity="sha512-kwYHlEpv/gjF1VrvFP/ijgu5blL4Gg/c1J3W+TG2G009geu0J/7M8w9GtLt191V4IHUj1FCWlPuk8SkfuW5irA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style type="text/tailwindcss">
     html, body {
@@ -52,10 +55,10 @@
         </h1>
         <div class="my-3">
           <label for="bonus0">Estimert utbetalt bonus i {{startYear}}</label>
-          <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">Oktober, november og desember for
+          <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic">Oktober, november og desember for
             de med månedlig bonus</p>
           <input id="bonus0" type="number" min="0" v-model="bonus0" />
-          <p v-if="bonus0 > 500000" class="mt-2 text-xs leading-2 text-lightgray border-l-2 pl-3 italic">
+          <p v-if="bonus0 > 500000" class="mt-2 text-xs leading-2 text-lightgray border-l-2 pl-2 italic">
             {{ guiFormatBonus }} i
             bonus..? Virkelig? Vipps gjerne noe til 943 01 272</p>
         </div>
@@ -69,13 +72,13 @@
         </div>
         <div class="my-3" v-if="!minimized">
           <label for="prosent0">Investeringsbeløp</label>
-          <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">1 krone opptjent bonus = 2 kroner i aksjer
+          <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic">1 krone opptjent bonus = 2 kroner i aksjer
           </p>
           <input id="prosent0" type="text" min="0" max="100" v-model="totalStocks" disabled />
         </div>
         <div class="my-3" v-if="!minimized">
           <label for="prosent0">Risiko</label>
-          <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">Teoretisk høyeste beløp tapt om aksjene
+          <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic">Teoretisk høyeste beløp tapt om aksjene
             faller til 0</p>
           </p>
           <input id="prosent0" type="text" min="0" max="100" v-model="stocks" disabled />
@@ -93,7 +96,7 @@
           <input id="stock1Realized" type="text" v-model="stock1Realized" disabled />
         </div>
         <div class="my-3" v-if="!minimized">
-          <label for="stock1Unrealized">Urealisert aksjeverdi {{startYear + 1}} <span
+          <label for="stock1Unrealized">Urealisert aksjeverdi for {{startYear + 1}} <span
               class="text-orange-500">*</span></label>
           <input id="stock1Unrealized" type="text" v-model="stock1Unrealized" disabled />
         </div>
@@ -114,8 +117,8 @@
           <input id="payout1b" type="checkbox" v-model="payout1b" :disabled="payout1a">
         </div>
         <div class="my-3">
-          <label for="stock2Change">Endring i aksjekurs siste året</label>
-          <input id="stock2Change" type="number" v-model="stock2Change" />
+          <label for="stock2Start">Endring i aksjekurs siste året</label>
+          <input id="stock2Start" type="number" v-model="stock2Start" />
         </div>
         <div class="my-3" v-if="!minimized">
           <label for="stock2Realized">Realisert aksjeverdi {{startYear + 2}} <span
@@ -123,7 +126,7 @@
           <input id="stock2Realized" type="text" v-model="stock2Realized" disabled />
         </div>
         <div class="my-3" v-if="!minimized">
-          <label for="stock2Unrealized">Urealisert aksjeverdi {{startYear + 2}} <span
+          <label for="stock2Unrealized">Urealisert aksjeverdi (akkumulert) <span
               class="text-orange-500">*</span></label>
           <input id="stock2Unrealized" type="text" v-model="stock2Unrealized" disabled />
         </div>
@@ -142,11 +145,11 @@
         </div>
         <div class="my-2 flex justify-between items-center">
           <label for="payout2b" class="whitespace-nowrap">Realiser aksjer fra {{startYear + 2}}</label>
-          <input id="payout2b" type="checkbox" v-model="payout2b" :disabled="!stock2Unrealized">
+          <input id="payout2b" type="checkbox" v-model="payout2b" :disabled="payout2a">
         </div>
         <div class="my-2 flex justify-between items-center">
           <label for="payout1c" class="whitespace-nowrap">Realiser aksjer fra {{startYear + 1}}</label>
-          <input id="payout1c" type="checkbox" v-model="payout1c" :disabled="!stock1Unrealized || payout1b">
+          <input id="payout1c" type="checkbox" v-model="payout1c" :disabled="payout1a || payout1b">
         </div>
         <div class="my-3">
           <label for="stock3Start">Endring i aksjekurs siste året</label>
@@ -158,7 +161,7 @@
           <input id="stock3Realized" type="text" v-model="stock3Realized" disabled />
         </div>
         <div class="my-3" v-if="!minimized">
-          <label for="stock3Unrealized">Urealisert aksjeverdi {{startYear + 3}} <span
+          <label for="stock3Unrealized">Urealisert aksjeverdi (akkumulert) <span
               class="text-orange-500">*</span></label>
           <input id="stock3Unrealized" type="text" v-model="stock3Unrealized" disabled />
         </div>
@@ -166,6 +169,10 @@
       <hr class="my-5">
       <div>
         <h2 class="mb-2 text-xl w-full underline underline-offset-2">Totalt</h2>
+        <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic" v-if="end1">Om du avslutter jobben i {{
+          startYear}} er ikke aksjekursendringer med i totalregningen</p>
+        <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic" v-if="end2">Om du avslutter jobben i {{
+          startYear + 1 }} er ikke aksjekursendringer for {{ startYear + 2}} med i totalregningen</p>
         <div v-if="!minimized">
           <div class="my-3">
             <label for="totalBonus">Bonus utbetalt som normalt </label>
@@ -176,37 +183,38 @@
             <input id="totalRealizedGain" type="text" disabled v-model="totalRealizedGain" />
           </div>
           <div class="my-3">
-            <label for="totalUnrealized">Urealiserte aksjeverdi <span class="text-orange-500">*</span></label>
+            <label for="totalUnrealized">Urealisert aksjeverdi <span class="text-orange-500">*</span></label>
             <input id="totalUnrealized" type="text" disabled v-model="totalUnrealized" />
           </div>
           <hr class="my-5">
         </div>
         <div class="my-3">
           <label for="totalAll">Totalt alle poster <span class="text-orange-500">*</span></label>
-          <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">Bonus + fortløpende realiserte aksjer +
+          <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic">Bonus + fortløpende realiserte aksjer +
             urealiserte aksjer</p>
           <input id="totalAll" type="text" disabled v-model="totalAll" />
         </div>
         <div class="my-3">
           <label for="comparedToBonusOnly">Gevinst <span class="text-orange-500">*</span></label>
-          <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">I forhold til vanlig bonusordning, legg
+          <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic">I forhold til vanlig bonusordning, legg
             merke til forbeholdene nedenfor</p>
           <input id="comparedToBonusOnly" :class="{ '!bg-red-800': comparedToBonusOnly < 0}" type="text" disabled
             v-model="comparedToBonusOnly" />
-          <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic" v-if="comparedToBonusOnly < 0">Nei dette
+          <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic mt-2" v-if="comparedToBonusOnly < 0">Nei
+            dette
             var visst ikke noe for deg... Kanskje du kan endre på noe?</p>
         </div>
 
       </div>
       <hr class="mt-5 mb-12">
       <div>
-        <p class="text-xs pl-3 border-l-2 italic"> Alle markerte (<span class="text-orange-500">*</span>) verdier er
+        <p class="text-xs pl-2 border-l-2 italic"> Alle markerte (<span class="text-orange-500">*</span>) verdier er
           estimater</p>
-        <p class="text-xs pl-3 border-l-2 italic mt-1">Med forbehold om at all realisering av aksjer skjer ved
+        <p class="text-xs pl-2 border-l-2 italic mt-1">Med forbehold om at all realisering av aksjer skjer ved
           mottakelse i Q1</p>
-        <p class="text-xs pl-3 border-l-2 italic mt-1">Det er ikke tatt høyde for skatt, feriepenger, pensjon,
-          inflasjon, tredje verdenskrig og andre smarte valg du heller kunne gjort med utbetalt bonus</p>
-        <p class="text-xs pl-3 border-l-2 italic mt-1">Do your own research - Det er dine penger det er snakk om</p>
+        <p class="text-xs pl-2 border-l-2 italic mt-1">Det er ikke tatt høyde for skatt, feriepenger, pensjon,
+          inflasjon, tredje verdenskrig eller andre smarte valg du heller kunne gjort med utbetalt bonus</p>
+        <p class="text-xs pl-2 border-l-2 italic mt-1">Do your own research - Det er dine penger det er snakk om!</p>
       </div>
       <hr class="mt-12 mb-12">
       <div class="my-2" v-if="bg">
@@ -226,7 +234,7 @@
     createApp({
       data() {
         return {
-          stock2Change: 5,
+          stock2Start: 5,
           stock3Start: 5,
           startYear: 2022,
           minimized: false,
@@ -263,8 +271,14 @@
         },
       },
       computed: {
+        stock2ChangeOnly() {
+          return (100 + this.stock2Start) / 100;
+        },
+        stock3ChangeOnly() {
+          return (100 + this.stock3Start) / 100;
+        },
         stock3Change() {
-          return ((100 + this.stock2Change) / 100) * ((100 + this.stock3Start) / 100);
+          return this.stock2ChangeOnly * this.stock3ChangeOnly;
         },
         stocks() {
           return this.bonus0 * (this.percentage0 / 100);
@@ -289,49 +303,73 @@
             return 0;
           }
           var payout = 0;
-          if (this.payout1b) {
-            payout += this.stock1Unrealized;
+          if (!this.payout1a && this.payout1b) {
+            payout += this.stock1Unrealized * this.stock2ChangeOnly;
           }
           if (this.payout2a) {
-            payout += this.dividedTotalStocks;
+            payout += this.dividedTotalStocks * this.stock2ChangeOnly;
           }
-          return Math.round(payout * ((100 + this.stock2Change) / 100));
+          return Math.round(payout);
         },
         stock3Realized() {
-          if (this.end2) {
+          if (this.end1 || this.end2) {
             return 0;
           }
           var payout = 0;
-          if (this.payout1c) {
-            payout += this.stock1Unrealized;
+          if (!this.payout1a && !this.payout1b && this.payout1c) {
+            payout += this.dividedTotalStocks * this.stock3Change;
           }
-          if (this.payout2b) {
-            payout += this.stock2Unrealized;
+          if (!this.payout2a && this.payout2b) {
+            payout += this.dividedTotalStocks * this.stock3Change;
           }
           if (this.payout3a) {
-            payout += this.dividedTotalStocks;
+            payout += this.dividedTotalStocks * this.stock3Change;
           }
-          return Math.round(payout * this.stock3Change);
+          return Math.round(payout);
         },
         stock1Unrealized() {
           return this.payout1a ? 0 : Math.round(this.dividedTotalStocks);
         },
         stock2Unrealized() {
-          return (this.end1 || this.payout2a) ? 0 : Math.round(this.dividedTotalStocks * (100 + this.stock2Change) / 100);
+          var payout = 0;
+          // TODO: Handle end
+          // if (this.end1) {
+          //   return 0;
+          // }
+          if (!this.payout1a && !this.payout1b) {
+            payout += this.dividedTotalStocks * this.stock2ChangeOnly;
+          }
+          if (!this.payout2a) {
+            payout += this.dividedTotalStocks * this.stock2ChangeOnly;
+          }
+          return Math.round(payout);
         },
         stock3Unrealized() {
-          return (this.end1 || this.end2 || this.payout3a) ? 0 : Math.round(this.dividedTotalStocks * this.stock3Change);
+          var payout = 0;
+          // if (this.end2 || this.end1) {
+          //   return 0;
+          // }
+          if (!this.payout1a && !this.payout1b && !this.payout1c) {
+            payout += this.dividedTotalStocks * this.stock3Change;
+          }
+          if (!this.payout2a && !this.payout2b) {
+            payout += this.dividedTotalStocks * this.stock3Change;
+          }
+          if (!this.payout3a) {
+            payout += this.dividedTotalStocks * this.stock3Change;
+          }
+          return Math.round(payout);
         },
         totalUnrealized() {
           var payout = 0;
-          if (!this.payout1b && !this.payout1c) {
-            payout += this.stock1Unrealized;
+          if (this.end1) {
+            payout = this.stock1Unrealized;
+          } else if (this.end2) {
+            payout = this.stock2Unrealized;
+          } else {
+            payout = this.stock3Unrealized;
           }
-          if (!this.payout2b) {
-            payout += this.stock2Unrealized;
-          }
-          payout += this.stock3Unrealized;
-          return payout;
+          return Math.round(payout);
         },
         totalRealizedGain() {
           return this.stock1Realized + this.stock2Realized + this.stock3Realized;
