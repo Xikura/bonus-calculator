@@ -323,7 +323,15 @@
           return (this.end1 || this.end2 || this.payout3a) ? 0 : Math.round(this.dividedTotalStocks * this.stock3Change);
         },
         totalUnrealized() {
-          return this.stock1Unrealized + this.stock2Unrealized + this.stock3Unrealized;
+          var payout = 0;
+          if (!this.payout1b && !this.payout1c) {
+            payout += this.stock1Unrealized;
+          }
+          if (!this.payout2b) {
+            payout += this.stock2Unrealized;
+          }
+          payout += this.stock3Unrealized;
+          return payout;
         },
         totalRealizedGain() {
           return this.stock1Realized + this.stock2Realized + this.stock3Realized;
