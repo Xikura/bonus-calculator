@@ -31,7 +31,7 @@
       height: 25px;
     }
     input[disabled] {
-      @apply pointer-events-none bg-teal-500/75 text-white border-none;
+      @apply bg-teal-500/75 text-white border-none;
     }
     .container {
       max-width: 600px !important;
@@ -71,14 +71,14 @@
           <label for="prosent0">Investeringsbeløp</label>
           <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">1 krone opptjent bonus = 2 kroner i aksjer
           </p>
-          <input id="prosent0" type="number" min="0" max="100" v-model="totalStocks" disabled />
+          <input id="prosent0" type="text" min="0" max="100" v-model="totalStocks" disabled />
         </div>
         <div class="my-3" v-if="!minimized">
           <label for="prosent0">Risiko</label>
           <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">Teoretisk høyeste beløp tapt om aksjene
             faller til 0</p>
           </p>
-          <input id="prosent0" type="number" min="0" max="100" v-model="stocks" disabled />
+          <input id="prosent0" type="text" min="0" max="100" v-model="stocks" disabled />
         </div>
       </div>
       <hr class="my-5">
@@ -90,12 +90,12 @@
         </div>
         <div class="my-3" v-if="!minimized">
           <label for="stock1Realized">Realisert aksjeverdi {{startYear + 1 }}</label>
-          <input id="stock1Realized" type="number" v-model="stock1Realized" disabled />
+          <input id="stock1Realized" type="text" v-model="stock1Realized" disabled />
         </div>
         <div class="my-3" v-if="!minimized">
           <label for="stock1Unrealized">Urealisert aksjeverdi {{startYear + 1}} <span
               class="text-orange-500">*</span></label>
-          <input id="stock1Unrealized" type="number" v-model="stock1Unrealized" disabled />
+          <input id="stock1Unrealized" type="text" v-model="stock1Unrealized" disabled />
         </div>
         <div class="my-2 flex justify-between items-center">
           <label for="end1" class="whitespace-nowrap">Avslutte jobb dette året?</label>
@@ -120,12 +120,12 @@
         <div class="my-3" v-if="!minimized">
           <label for="stock2Realized">Realisert aksjeverdi {{startYear + 2}} <span
               class="text-orange-500">*</span></label>
-          <input id="stock2Realized" type="number" v-model="stock2Realized" disabled />
+          <input id="stock2Realized" type="text" v-model="stock2Realized" disabled />
         </div>
         <div class="my-3" v-if="!minimized">
           <label for="stock2Unrealized">Urealisert aksjeverdi {{startYear + 2}} <span
               class="text-orange-500">*</span></label>
-          <input id="stock2Unrealized" type="number" v-model="stock2Unrealized" disabled />
+          <input id="stock2Unrealized" type="text" v-model="stock2Unrealized" disabled />
         </div>
         <div class="my-2 flex justify-between items-center">
           <label for="end2" class="whitespace-nowrap">Avslutte jobb dette året?</label>
@@ -155,12 +155,12 @@
         <div class="my-3" v-if="!minimized">
           <label for="stock3Realized">Realisert aksjeverdi {{startYear + 3}} <span
               class="text-orange-500">*</span></label>
-          <input id="stock3Realized" type="number" v-model="stock3Realized" disabled />
+          <input id="stock3Realized" type="text" v-model="stock3Realized" disabled />
         </div>
         <div class="my-3" v-if="!minimized">
           <label for="stock3Unrealized">Urealisert aksjeverdi {{startYear + 3}} <span
               class="text-orange-500">*</span></label>
-          <input id="stock3Unrealized" type="number" v-model="stock3Unrealized" disabled />
+          <input id="stock3Unrealized" type="text" v-model="stock3Unrealized" disabled />
         </div>
       </div>
       <hr class="my-5">
@@ -169,38 +169,29 @@
         <div v-if="!minimized">
           <div class="my-3">
             <label for="totalBonus">Bonus utbetalt som normalt </label>
-            <input id="totalBonus" type="number" disabled v-model="totalBonus" />
+            <input id="totalBonus" type="text" disabled v-model="totalBonus" />
           </div>
           <div class="my-3">
             <label for="totalRealizedGain">Realisert aksjeverdi <span class="text-orange-500">*</span></label>
-            <input id="totalRealizedGain" type="number" disabled v-model="totalRealizedGain" />
+            <input id="totalRealizedGain" type="text" disabled v-model="totalRealizedGain" />
           </div>
           <div class="my-3">
             <label for="totalUnrealized">Urealiserte aksjeverdi <span class="text-orange-500">*</span></label>
-            <input id="totalUnrealized" type="number" disabled v-model="totalUnrealized" />
+            <input id="totalUnrealized" type="text" disabled v-model="totalUnrealized" />
           </div>
-          <!-- <div class="my-3">
-          <label for="prosent">Urealisert aksjeverdi</label>
-          <input id="prosent" type="number" />
-        </div>
-        <div class="my-3">
-          <label for="prosent">Totalt</label>
-          <input id="prosent" type="number" />
-        </div> -->
           <hr class="my-5">
         </div>
         <div class="my-3">
           <label for="totalAll">Totalt alle poster <span class="text-orange-500">*</span></label>
           <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">Bonus + fortløpende realiserte aksjer +
             urealiserte aksjer</p>
-          <!-- <input id="totalRealizedStockAndBonus" type="number" disabled v-model="totalRealizedStockAndBonus" /> -->
-          <input id="totalAll" type="number" disabled v-model="totalAll" />
+          <input id="totalAll" type="text" disabled v-model="totalAll" />
         </div>
         <div class="my-3">
           <label for="comparedToBonusOnly">Gevinst <span class="text-orange-500">*</span></label>
           <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic">I forhold til vanlig bonusordning, legg
             merke til forbeholdene nedenfor</p>
-          <input id="comparedToBonusOnly" :class="{ '!bg-red-800': comparedToBonusOnly < 0}" type="number" disabled
+          <input id="comparedToBonusOnly" :class="{ '!bg-red-800': comparedToBonusOnly < 0}" type="text" disabled
             v-model="comparedToBonusOnly" />
           <p class="text-xs leading-2 text-lightgray border-l-2 pl-3 italic" v-if="comparedToBonusOnly < 0">Nei dette
             var visst ikke noe for deg... Kanskje du kan endre på noe?</p>
