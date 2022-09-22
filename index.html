@@ -146,7 +146,7 @@
         </div>
         <div class="my-2 flex justify-between items-center">
           <label for="payout1c" class="whitespace-nowrap">Realiser aksjer fra {{startYear + 1}}</label>
-          <input id="payout1c" type="checkbox" v-model="payout1c" :disabled="!stock1Unrealized">
+          <input id="payout1c" type="checkbox" v-model="payout1c" :disabled="!stock1Unrealized || payout1b">
         </div>
         <div class="my-3">
           <label for="stock3Start">Endring i aksjekurs siste året</label>
