@@ -1,2 +1,2 @@
 # bonus-calculator
-Calculate conus
+Calculate bonus
