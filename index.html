@@ -54,11 +54,11 @@
         <h1 class="mb-8 text-2xl text-center w-full underline underline-offset-2">Crayon bonusordning {{startYear}}
         </h1>
         <div class="my-3">
-          <label for="bonus0">Estimert utbetalt bonus i {{startYear}}</label>
+          <label for="bonus0">Forventet utbetalt bonus i {{startYear}}</label>
           <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic">Oktober, november og desember for
             de med månedlig bonus</p>
           <input id="bonus0" type="number" min="0" v-model="bonus0" />
-          <p v-if="bonus0 > 500000" class="mt-2 text-xs leading-2 text-lightgray border-l-2 pl-2 italic">
+          <p v-if="bonus0 > 400000" class="mt-2 text-xs leading-2 text-lightgray border-l-2 pl-2 italic">
             {{ guiFormatBonus }} i
             bonus..? Virkelig? Vipps gjerne noe til 943 01 272</p>
         </div>
@@ -88,7 +88,7 @@
       <div>
         <h2 class="mb-2 text-xl w-full underline underline-offset-2">{{startYear + 1}}</h2>
         <div class="my-2 flex justify-between items-center">
-          <label for="payout1a" class="whitespace-nowrap">Realiser årets aksjer</label>
+          <label for="payout1a" class="whitespace-nowrap">Realiser årets aksjer ved mottakelse</label>
           <input id="payout1a" type="checkbox" v-model="payout1a">
         </div>
         <div class="my-3" v-if="!minimized">
@@ -109,7 +109,7 @@
         <hr class="my-5">
         <h2 class="mb-2 text-xl w-full underline underline-offset-2">{{startYear + 2}}</h2>
         <div class="my-2 flex justify-between items-center">
-          <label for="payout2a" class="whitespace-nowrap">Realiser årets aksjer</label>
+          <label for="payout2a" class="whitespace-nowrap">Realiser årets aksjer ved mottakelse</label>
           <input id="payout2a" type="checkbox" v-model="payout2a">
         </div>
         <div class="my-2 flex justify-between items-center">
@@ -117,7 +117,7 @@
           <input id="payout1b" type="checkbox" v-model="payout1b" :disabled="payout1a">
         </div>
         <div class="my-3">
-          <label for="stock2Start">Endring i aksjekurs siste året</label>
+          <label for="stock2Start">Endring i aksjekurs det siste året</label>
           <input id="stock2Start" type="number" v-model="stock2Start" />
         </div>
         <div class="my-3" v-if="!minimized">
@@ -140,7 +140,7 @@
         <hr class="my-5">
         <h2 class="mb-2 text-xl w-full underline underline-offset-2">{{startYear + 3}}</h2>
         <div class="my-2 flex justify-between items-center">
-          <label for="payout3" class="whitespace-nowrap">Realiser årets aksjer</label>
+          <label for="payout3" class="whitespace-nowrap">Realiser årets aksjer ved mottakelse</label>
           <input id="payout3" type="checkbox" v-model="payout3a">
         </div>
         <div class="my-2 flex justify-between items-center">
@@ -152,7 +152,7 @@
           <input id="payout1c" type="checkbox" v-model="payout1c" :disabled="payout1a || payout1b">
         </div>
         <div class="my-3">
-          <label for="stock3Start">Endring i aksjekurs siste året</label>
+          <label for="stock3Start">Endring i aksjekurs det siste året</label>
           <input id="stock3Start" type="number" v-model="stock3Start" />
         </div>
         <div class="my-3" v-if="!minimized">
@@ -170,9 +170,13 @@
       <div>
         <h2 class="mb-2 text-xl w-full underline underline-offset-2">Totalt</h2>
         <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic" v-if="end1">Om du avslutter jobben i {{
-          startYear}} er ikke aksjekursendringer med i totalregningen</p>
-        <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic" v-if="end2">Om du avslutter jobben i {{
-          startYear + 1 }} er ikke aksjekursendringer for {{ startYear + 2}} med i totalregningen</p>
+          startYear + 1}} er ikke aksjekursendringer etter Q1 {{ startYear + 1}} med i totalregningen</p>
+        <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic" v-if="end2 && !end1">Om du avslutter jobben i
+          {{
+          startYear + 2 }} er ikke aksjekursendringer etter Q1 {{ startYear + 2}} med i totalregningen</p>
+        <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic" v-if="!end2 && !end1">Totalregningen
+          avsluttes i det du mottar de siste aksjene i Q1 {{startYear + 3}} og videre aksjekursendringer for urealiserte
+          aksjer er ikke utregnet.</p>
         <div v-if="!minimized">
           <div class="my-3">
             <label for="totalBonus">Bonus utbetalt som normalt </label>
@@ -210,10 +214,9 @@
       <div>
         <p class="text-xs pl-2 border-l-2 italic"> Alle markerte (<span class="text-orange-500">*</span>) verdier er
           estimater</p>
-        <p class="text-xs pl-2 border-l-2 italic mt-1">Med forbehold om at all realisering av aksjer skjer ved
-          mottakelse i Q1</p>
+        <p class="text-xs pl-2 border-l-2 italic mt-1">Med forbehold om at all realisering av aksjer skjer i Q1</p>
         <p class="text-xs pl-2 border-l-2 italic mt-1">Det er ikke tatt høyde for skatt, feriepenger, pensjon,
-          inflasjon, tredje verdenskrig eller andre smarte valg du heller kunne gjort med utbetalt bonus</p>
+          inflasjon, tredje verdenskrig eller smarte valg du kunne gjort med utbetalt bonus</p>
         <p class="text-xs pl-2 border-l-2 italic mt-1">Do your own research - Det er dine penger det er snakk om!</p>
       </div>
       <hr class="mt-12 mb-12">
