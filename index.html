@@ -197,7 +197,6 @@
             var visst ikke noe for deg... Kanskje du kan endre på noe?</p>
         </div>
 
-
       </div>
       <hr class="mt-5 mb-12">
       <div>
@@ -205,9 +204,18 @@
           estimater</p>
         <p class="text-xs pl-3 border-l-2 italic mt-1">Med forbehold om at all realisering av aksjer skjer ved
           mottakelse i Q1</p>
-        <p class="text-xs pl-3 border-l-2 italic mt-1">Det er ikke tatt høyde for skatt, feriepenger, pensjon, inflasjon
-          og andre smarte valg du heller kunne gjort med utbetalt bonus</p>
+        <p class="text-xs pl-3 border-l-2 italic mt-1">Det er ikke tatt høyde for skatt, feriepenger, pensjon,
+          inflasjon, tredje verdenskrig og andre smarte valg du heller kunne gjort med utbetalt bonus</p>
         <p class="text-xs pl-3 border-l-2 italic mt-1">Do your own research - Det er dine penger det er snakk om</p>
+      </div>
+      <hr class="mt-12 mb-12">
+      <div class="my-2" v-if="bg">
+        <img class="mx-auto"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkTox9qH8HTsfdDaTLUj9uPggW9CaGSVymQqdHfiaCd3_-Y_1OqJif4Bi10fkUkRHgv0M&usqp=CAU" />
+      </div>
+      <div class="my-2 flex justify-between items-center" v-if="!bg">
+        <label for="bg" class="whitespace-nowrap">Nytt bakgrunnsbilde?</label>
+        <input id="bg" type="checkbox" :value="bg" @input="changeBg">
       </div>
     </div>
   </div>
@@ -234,6 +242,8 @@
           payout3a: false,
           end1: false,
           end2: false,
+          bg: false,
+          showBunny: false,
           // Total
         }
       },
@@ -245,16 +255,15 @@
           this.percentage0 = e.target.value;
           this.$forceUpdate();
         },
+        changeBg() {
+          this.bg = true;
+        },
         guiFormatNumber(number) {
           return number.toLocaleString('no-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         },
-        // roundToNearestTen(value) {
-        //   return Math.round(value / 10) * 10;
-        // }
       },
       computed: {
         stock3Change() {
-          console.log(((100 + this.stock2Change) / 100) * ((100 + this.stock3Start) / 100));
           return ((100 + this.stock2Change) / 100) * ((100 + this.stock3Start) / 100);
         },
         stocks() {
