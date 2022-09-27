@@ -69,7 +69,11 @@
         <div class="my-3 flex justify-between items-center">
           <label for="minimized" class="whitespace-nowrap">Forenklet visning?</label>
           <input id="minimized" type="checkbox" v-model="minimized">
+
         </div>
+        <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic" v-if="minimized">Skjema er forsøkt
+          forenklet, men det er dessverre noe du må ta stilling til nedenfor.
+        </p>
         <div class="my-3" v-if="!minimized">
           <label for="prosent0">Investeringsbeløp</label>
           <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic">1 krone opptjent bonus = 2 kroner i aksjer
@@ -93,24 +97,24 @@
             antall aksjer du vil motta de neste tre årene blir fastsatt basert på denne kursen. </p>
           <p class="text-sm leading-2 text-lightgray border-l-2 pl-2 mt-1 ">Den <strong>reele verdien</strong> på
             aksjene du mottar
-            vil være avhengig av aksjekursendringer etter Q1 {{ startYear + 1}}, denne kan gå begge veier. Dette kan du
-            teste nedenfor.</p>
+            vil være avhengig av aksjekursendringer etter Q1 {{ startYear + 1}}, denne kan gå begge veier.<br />
+            Dette kan du teste nedenfor.</p>
         </div>
-        <div class="my-2 flex justify-between items-center">
+        <div class="my-3 flex justify-start items-center">
+          <input id="end0" type="checkbox" v-model="end0" class="mr-3">
           <label for="end0" class="whitespace-nowrap">Avslutte jobb dette året?</label>
-          <input id="end0" type="checkbox" v-model="end0">
         </div>
       </div>
       <div v-if="!end0">
         <hr class="my-5">
         <h2 class="mb-2 text-xl w-full underline underline-offset-2">{{startYear + 2}}</h2>
-        <div class="mt-3 mb-4">
+        <div class="my-3">
           <label for="stock1Start">Endring i aksjekurs det siste året i prosent</label>
           <input id="stock1Start" type="number" v-model="stock1Start" />
         </div>
-        <div class="my-2 flex justify-between items-center">
+        <div class="my-3 flex justify-start items-center">
+          <input id="payout1a" type="checkbox" v-model="payout1a" class="mr-3">
           <label for="payout1a" class="whitespace-nowrap">Realiser årets aksjer ved mottakelse</label>
-          <input id="payout1a" type="checkbox" v-model="payout1a">
         </div>
         <div class="my-3" v-if="!minimized">
           <label for="stock1Realized">Realisert aksjeverdi {{startYear + 2 }}</label>
@@ -121,25 +125,25 @@
               class="text-orange-500">*</span></label>
           <input id="stock1Unrealized" type="text" v-model="stock1Unrealized" readonly />
         </div>
-        <div class="my-2 flex justify-between items-center">
+        <div class="my-3 flex justify-start items-center">
+          <input id="end1" type="checkbox" v-model="end1" class="mr-3">
           <label for="end1" class="whitespace-nowrap">Avslutte jobb dette året?</label>
-          <input id="end1" type="checkbox" v-model="end1">
         </div>
       </div>
       <div v-if="!end1 && !end0">
         <hr class="my-5">
         <h2 class="mb-2 text-xl w-full underline underline-offset-2">{{startYear + 3}}</h2>
-        <div class="mt-3 mb-4">
+        <div class="my-3">
           <label for="stock2Start">Endring i aksjekurs det siste året i prosent</label>
           <input id="stock2Start" type="number" v-model="stock2Start" />
         </div>
-        <div class="my-2 flex justify-between items-center">
+        <div class="my-3 flex justify-start items-center">
+          <input id="payout2a" type="checkbox" v-model="payout2a" class="mr-3">
           <label for="payout2a" class="whitespace-nowrap">Realiser årets aksjer ved mottakelse</label>
-          <input id="payout2a" type="checkbox" v-model="payout2a">
         </div>
-        <div class="my-2 flex justify-between items-center">
+        <div class="my-3 flex justify-start items-center">
+          <input id="payout1b" type="checkbox" v-model="payout1b" :disabled="payout1a" class="mr-3">
           <label for="payout1b" class="whitespace-nowrap">Realiser aksjer fra {{startYear + 2}}</label>
-          <input id="payout1b" type="checkbox" v-model="payout1b" :disabled="payout1a">
         </div>
         <div class="my-3" v-if="!minimized">
           <label for="stock2Realized">Realisert aksjeverdi {{startYear + 3}} <span
@@ -151,29 +155,29 @@
               class="text-orange-500">*</span></label>
           <input id="stock2Unrealized" type="text" v-model="stock2Unrealized" readonly />
         </div>
-        <div class="my-2 flex justify-between items-center">
+        <div class="my-3 flex justify-start items-center">
+          <input id="end2" type="checkbox" v-model="end2" class="mr-3">
           <label for="end2" class="whitespace-nowrap">Avslutte jobb dette året?</label>
-          <input id="end2" type="checkbox" v-model="end2">
         </div>
       </div>
       <div v-if="!end2 && !end1 && !end0">
         <hr class="my-5">
         <h2 class="mb-2 text-xl w-full underline underline-offset-2">{{startYear + 4}}</h2>
-        <div class="mt-3 mb-4">
+        <div class="my-3">
           <label for="stock3Start">Endring i aksjekurs det siste året i prosent</label>
           <input id="stock3Start" type="number" v-model="stock3Start" />
         </div>
-        <div class="my-2 flex justify-between items-center">
+        <div class="my-3 flex justify-start items-center">
+          <input id="payout3" type="checkbox" v-model="payout3a" class="mr-3">
           <label for="payout3" class="whitespace-nowrap">Realiser årets aksjer ved mottakelse</label>
-          <input id="payout3" type="checkbox" v-model="payout3a">
         </div>
-        <div class="my-2 flex justify-between items-center">
+        <div class="my-3 flex justify-start items-center">
+          <input id="payout2b" type="checkbox" v-model="payout2b" :disabled="payout2a" class="mr-3">
           <label for="payout2b" class="whitespace-nowrap">Realiser aksjer fra {{startYear + 3}}</label>
-          <input id="payout2b" type="checkbox" v-model="payout2b" :disabled="payout2a">
         </div>
-        <div class="my-2 flex justify-between items-center">
+        <div class="my-3 flex justify-start items-center">
+          <input id="payout1c" type="checkbox" v-model="payout1c" :disabled="payout1a || payout1b" class="mr-3">
           <label for="payout1c" class="whitespace-nowrap">Realiser aksjer fra {{startYear + 2}}</label>
-          <input id="payout1c" type="checkbox" v-model="payout1c" :disabled="payout1a || payout1b">
         </div>
         <div class="my-3" v-if="!minimized">
           <label for="stock3Realized">Realisert aksjeverdi {{startYear + 4}} <span
@@ -245,13 +249,13 @@
         <p class="text-xs pl-2 border-l-2 italic mt-1">Do your own research - Det er dine penger det er snakk om!</p>
       </div>
       <hr class="mt-12 mb-12">
-      <div class="my-2" v-if="bg">
+      <div class="my-3" v-if="bg">
         <img class="mx-auto"
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkTox9qH8HTsfdDaTLUj9uPggW9CaGSVymQqdHfiaCd3_-Y_1OqJif4Bi10fkUkRHgv0M&usqp=CAU" />
       </div>
-      <div class="my-2 flex justify-between items-center" v-if="!bg">
+      <div class="my-3 flex justify-start items-center" v-if="!bg">
+        <input id="bg" type="checkbox" :value="bg" @input="changeBg" class="mr-3">
         <label for="bg" class="whitespace-nowrap">Nytt bakgrunnsbilde?</label>
-        <input id="bg" type="checkbox" :value="bg" @input="changeBg">
       </div>
     </div>
   </div>
