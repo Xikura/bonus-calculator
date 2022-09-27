@@ -66,10 +66,9 @@
           <label for="prosent0">Prosentandel omgjort til aksjer</label>
           <input id="prosent0" type="number" min="0" max="100" :value="percentage0" @input="updatePercentage0" />
         </div>
-        <div class="my-3 flex justify-between items-center">
+        <div class="my-3 flex justify-start items-center">
+          <input id="minimized" type="checkbox" v-model="minimized" class="mr-3">
           <label for="minimized" class="whitespace-nowrap">Forenklet visning?</label>
-          <input id="minimized" type="checkbox" v-model="minimized">
-
         </div>
         <p class="text-xs leading-2 text-lightgray border-l-2 pl-2 italic" v-if="minimized">Skjema er forsøkt
           forenklet, men det er dessverre noe du må ta stilling til nedenfor.
