@@ -139,7 +139,7 @@
         </div>
         <div class="my-2 flex justify-between items-center">
           <label for="payout1b" class="whitespace-nowrap">Realiser aksjer fra {{startYear + 2}}</label>
-          <input id="payout1b" type="checkbox" v-model="payout1b" :readonly="payout1a">
+          <input id="payout1b" type="checkbox" v-model="payout1b" :disabled="payout1a">
         </div>
         <div class="my-3" v-if="!minimized">
           <label for="stock2Realized">Realisert aksjeverdi {{startYear + 3}} <span
@@ -169,11 +169,11 @@
         </div>
         <div class="my-2 flex justify-between items-center">
           <label for="payout2b" class="whitespace-nowrap">Realiser aksjer fra {{startYear + 3}}</label>
-          <input id="payout2b" type="checkbox" v-model="payout2b" :readonly="payout2a">
+          <input id="payout2b" type="checkbox" v-model="payout2b" :disabled="payout2a">
         </div>
         <div class="my-2 flex justify-between items-center">
           <label for="payout1c" class="whitespace-nowrap">Realiser aksjer fra {{startYear + 2}}</label>
-          <input id="payout1c" type="checkbox" v-model="payout1c" :readonly="payout1a || payout1b">
+          <input id="payout1c" type="checkbox" v-model="payout1c" :disabled="payout1a || payout1b">
         </div>
         <div class="my-3" v-if="!minimized">
           <label for="stock3Realized">Realisert aksjeverdi {{startYear + 4}} <span
